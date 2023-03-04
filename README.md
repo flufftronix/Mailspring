@@ -37,9 +37,7 @@ your email credentials to the cloud.** For a full list of features, check out
 
 ## Download Mailspring
 
-You can download compiled versions of Mailspring for Windows, Mac OS X, and
-Linux (deb, rpm and snap) from
-[https://getmailspring.com/download](https://getmailspring.com/download).
+Currently this fork has to be built from source.
 
 ## Getting Help
 
