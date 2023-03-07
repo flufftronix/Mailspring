@@ -2,6 +2,7 @@
   "*": {
     "serverUrls": {
       "api": "https://id.getmailspring.com",
+      "share": "https://share.getmailspring.com",
       "openTracking": "https://link.getmailspring.com",
       "linkTracking": "https://link.getmailspring.com"
     },
