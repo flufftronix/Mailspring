@@ -33,18 +33,18 @@ module.exports = ErrorLogger = (function () {
     this.inDevMode = args.inDevMode;
     this.resourcePath = args.resourcePath;
 
-    this._startCrashReporter();
+    //this._startCrashReporter();
 
     this._extendErrorObject();
 
     this._extendNativeConsole();
 
     this.extensions = [
-      new RavenErrorReporter({
+      /*new RavenErrorReporter({
         inSpecMode: args.inSpecMode,
         inDevMode: args.inDevMode,
         resourcePath: args.resourcePath,
-      }),
+      })*/
     ];
 
     if (this.inSpecMode) {
@@ -107,7 +107,7 @@ module.exports = ErrorLogger = (function () {
     if (process.type === 'renderer') {
       return;
     }
-    require('electron').crashReporter.start({
+    /*require('electron').crashReporter.start({
       productName: 'Mailspring',
       companyName: 'Mailspring',
       submitURL: `https://id.getmailspring.com/report-crash?ver=${appVersion}&platform=${process.platform}`,
@@ -117,7 +117,7 @@ module.exports = ErrorLogger = (function () {
         ver: appVersion,
         platform: process.platform,
       },
-    })
+    });*/
   };
 
   ErrorLogger.prototype._extendNativeConsole = function (args) {

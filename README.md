@@ -11,6 +11,21 @@ Mailspring's sync engine is spawned by the Electron application and runs locally
 
 ![Mailspring Screenshot](https://github.com/Foundry376/Mailspring/raw/master/screenshots/hero_graphic_mac%402x.png)
 
+## Changes in this fork
+- Disabled telemetry
+- Addad option to use a custom API server (Check out [1RandomDev/mailspring-api](https://github.com/1RandomDev/mailspring-api))
+
+## Change api server
+To use an alternative server for MailSync and the Mailspring api you can edit the following entrys in the `config.json`
+```jsonc
+"serverUrls": {
+  "api": "https://id.getmailspring.com",              // Main API URL for Mailspring backend and MailSync
+  "share": "https://share.getmailspring.com",          // URL for sharing content (currently only applies to thread sharing, other features are configured on the server)
+  "openTracking": "https://link.getmailspring.com",   // Link that gets added to emails when open tracking is enabled
+  "linkTracking": "https://link.getmailspring.com"    // Link that gets added to emails when link tracking is enabled
+}
+```
+
 ## Features
 
 Mailspring comes packed with powerful features like Unified Inbox, Snooze, Send
@@ -23,9 +38,7 @@ your email credentials to the cloud.** For a full list of features, check out
 
 ## Download Mailspring
 
-You can download compiled versions of Mailspring for Windows, Mac OS X, and
-Linux (deb, rpm and snap) from
-[https://getmailspring.com/download](https://getmailspring.com/download).
+Currently this fork has to be built from source.
 
 ## Getting Help
 
