@@ -1,6 +1,6 @@
 /* eslint global-require: 0 */ /* eslint prefer-template: 0 */
 /* eslint quote-props: 0 */
-const packager = require('electron-packager');
+const packager = require('@electron/packager');
 const path = require('path');
 const util = require('util');
 const tmpdir = path.resolve(require('os').tmpdir(), 'nylas-build');
@@ -167,7 +167,9 @@ module.exports = grunt => {
             '**/vendor/**',
             'examples/**',
             '**/src/tasks/**',
+            '**/src/quickpreview/**',
             '**/static/all_licenses.html',
+            '**/static/extensions/**',
             '**/node_modules/spellchecker/**',
             '**/node_modules/windows-shortcuts/**',
           ].join(',') +
@@ -208,7 +210,6 @@ module.exports = grunt => {
         /node_modules[/].*[/]tests?$/,
         /node_modules[/].*[/]coverage$/,
         /node_modules[/].*[/]benchmark$/,
-        /@paulbetts[/]+cld[/]+deps[/]+cld/,
       ],
       out: grunt.config('outputDir'),
       overwrite: true,
@@ -244,6 +245,7 @@ module.exports = grunt => {
             appleId: process.env.APPLE_ID,
             appleIdPassword: process.env.APPLE_ID_PASSWORD,
             ascProvider: process.env.APPLE_ID_ASC_PROVIDER,
+            teamId: process.env.APPLE_TEAM_ID,
           }
         : undefined,
       win32metadata: {

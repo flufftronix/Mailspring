@@ -29,10 +29,14 @@
   <project_license>GPL-3.0+</project_license>
 
   <screenshots>
-    <screenshot type="default">https://getmailspring.com/static/img/hero_graphic_linux@2x.png</screenshot>
+    <screenshot type="default">
+      <caption>Mailspring Hero</caption>
+      <image type="source">https://getmailspring.com/static/img/hero_graphic_linux@2x.png</image>
+    </screenshot>
   </screenshots>
 
   <releases>
+    <release version="1.14.0" date="2024-09-13" />
     <release version="1.13.3" date="2024-01-08" />
     <release version="1.13.2" date="2023-12-10" />
     <release version="1.13.1" date="2023-11-21" />

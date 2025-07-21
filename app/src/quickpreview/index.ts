@@ -1,4 +1,3 @@
-
 import { execFile } from 'child_process';
 import path from 'path';
 import { File } from 'mailspring-exports';
@@ -7,10 +6,12 @@ let quickPreviewWindow = null;
 let captureWindow = null;
 const captureQueue = [];
 
+const filesRoot = __dirname.replace('app.asar', 'app.asar.unpacked');
+
 const FileSizeLimit = 5 * 1024 * 1024;
 const ThumbnailWidth = 320 * (11 / 8.5);
 const QuicklookIsAvailable = process.platform === 'darwin';
-const PDFJSRoot = path.join(__dirname, 'pdfjs-2.0.943');
+const PDFJSRoot = path.join(filesRoot, 'pdfjs-4.3.136');
 
 const QuicklookBlacklist = [
   'jpg',
@@ -31,21 +32,7 @@ const CrossplatformStrategies = {
   pdfjs: ['pdf'],
   mammoth: ['docx'],
   snarkdown: ['md'],
-  xlsx: [
-    'xls',
-    'xlsx',
-    'csv',
-    'eth',
-    'ods',
-    'fods',
-    'uos1',
-    'uos2',
-    'dbf',
-    'txt',
-    'prn',
-    'xlw',
-    'xlsb',
-  ],
+  xlsx: ['xls', 'xlsx', 'csv', 'eth', 'ods', 'fods', 'uos1', 'uos2', 'dbf', 'prn', 'xlw', 'xlsb'],
   prism: [
     'html',
     'svg',
@@ -73,6 +60,7 @@ const CrossplatformStrategies = {
     'rb',
     'rs',
     'sql',
+    'yml',
     'yaml',
     'txt',
     'log',
@@ -158,27 +146,27 @@ const PreviewWindowMenuTemplate: Electron.MenuItemConstructorOptions[] = [
       {
         label: 'Reload',
         accelerator: 'CmdOrCtrl+R',
-        click: function (item, focusedWindow) {
+        click: function(item, focusedWindow) {
           if (focusedWindow) focusedWindow.reload();
         },
       },
       {
         label: 'Toggle Full Screen',
-        accelerator: (function () {
+        accelerator: (function() {
           if (process.platform === 'darwin') return 'Ctrl+Command+F';
           else return 'F11';
         })(),
-        click: function (item, focusedWindow) {
+        click: function(item, focusedWindow) {
           if (focusedWindow) focusedWindow.setFullScreen(!focusedWindow.isFullScreen());
         },
       },
       {
         label: 'Toggle Developer Tools',
-        accelerator: (function () {
+        accelerator: (function() {
           if (process.platform === 'darwin') return 'Alt+Command+I';
           else return 'Ctrl+Shift+I';
         })(),
-        click: function (item, focusedWindow) {
+        click: function(item, focusedWindow) {
           if (focusedWindow) focusedWindow.webContents.toggleDevTools();
         },
       },
@@ -212,25 +200,28 @@ export function displayQuickPreviewWindow(filePath) {
       skipTaskbar: true,
       backgroundColor: isPDF ? '#404040' : '#FFF',
       webPreferences: {
-        preload: path.join(__dirname, 'preload.js'),
+        preload: path.join(filesRoot, 'preload.js'),
         nodeIntegration: false,
-        contextIsolation: false,
+        contextIsolation: true,
       },
     });
     quickPreviewWindow.once('closed', () => {
       quickPreviewWindow = null;
     });
-    quickPreviewWindow.setMenu(require('@electron/remote').Menu.buildFromTemplate(PreviewWindowMenuTemplate));
+    quickPreviewWindow.setMenu(
+      require('@electron/remote').Menu.buildFromTemplate(PreviewWindowMenuTemplate)
+    );
   } else {
     quickPreviewWindow.show();
   }
   quickPreviewWindow.setTitle(path.basename(filePath));
+
   if (isPDF) {
     quickPreviewWindow.loadFile(path.join(PDFJSRoot, 'web/viewer.html'), {
       search: `file=${encodeURIComponent(`file://${filePath}`)}`,
     });
   } else {
-    quickPreviewWindow.loadFile(path.join(__dirname, 'renderer.html'), {
+    quickPreviewWindow.loadFile(path.join(filesRoot, 'renderer.html'), {
       search: JSON.stringify({ mode: 'display', filePath, strategy }),
     });
   }
@@ -276,9 +267,9 @@ function _createCaptureWindow() {
     height: ThumbnailWidth,
     show: false,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(filesRoot, 'preload.js'),
       nodeIntegration: false,
-      contextIsolation: false,
+      contextIsolation: true,
     },
   });
   win.webContents.on('crashed', () => {
@@ -306,7 +297,7 @@ function _generateNextCrossplatformPreview() {
   const { strategy, filePath, previewPath, resolve } = captureQueue.pop();
 
   // Start the thumbnail generation
-  captureWindow.loadFile(path.join(__dirname, 'renderer.html'), {
+  captureWindow.loadFile(path.join(filesRoot, 'renderer.html'), {
     search: JSON.stringify({ strategy, mode: 'capture', filePath, previewPath }),
   });
 
@@ -336,12 +327,21 @@ function _generateNextCrossplatformPreview() {
 }
 
 async function _generateQuicklookPreview({ filePath }: { filePath: string }) {
-  const dirQuoted = path.dirname(filePath).replace(/"/g, '\\"')
-  const pathQuoted = filePath.replace(/"/g, '\\"')
+  const dirQuoted = path.dirname(filePath).replace(/"/g, '\\"');
+  const pathQuoted = filePath.replace(/"/g, '\\"');
 
   return new Promise(resolve => {
     const cmd = '/usr/bin/qlmanage';
-    const args = ['-t', "-f", `${window.devicePixelRatio}`, '-s', `${ThumbnailWidth}`, '-o', dirQuoted, pathQuoted]
+    const args = [
+      '-t',
+      '-f',
+      `${window.devicePixelRatio}`,
+      '-s',
+      `${ThumbnailWidth}`,
+      '-o',
+      dirQuoted,
+      pathQuoted,
+    ];
 
     execFile(cmd, args, (error, stdout, stderr) => {
       // Note: sometimes qlmanage outputs to stderr but still successfully

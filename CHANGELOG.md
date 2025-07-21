@@ -1,5 +1,67 @@
 # Mailspring Changelog
 
+## 1.16.0
+
+- Thunderbird-style Autoconfiguration (#2493)
+
+- Fix in-app previews for PDF attachments on Windows / Linux
+
+- Update and improve zh-TW Traditional Chinese locale (#2498)
+
+- Update Czech translation (#2500)
+
+- snap: Use core24 as base (#2497)
+
+- Change lsb-core-noarch to be an optional dependency in the RPM package. (#2503)
+
+- Fix a few misc application errors logged to our reporting service
+
+- Upgrade to Electron 37.2.2 - Chromium 138, V8 13.8, and Node.js 22.16 for faster JavaScript execution and better email rendering.
+
+## 1.15.1
+
+This is a patch release that resolves several user-reported issues. Thank
+
+- On Windows, notifications could not appear because of an issue checking Windows "Quiet Hours" settings
+
+- Dragging and dropping file attachments to the composer or the signature editor resulted in a path error.
+
+- On Windows, you may need to install Language Packs for some languages to be available for spellcheck, and this no longer causes an error.
+
+- The RPM build no longer generate build_id links to prevent conflicts when installing multiple Electron apps.
+
+## 1.15.0
+
+Happy 2025! This version of Mailspring upgraedes the app to Electron 33 and Chromium 130, ensuring the latest upstream bug fixes, security patches and improvements are available in the app.
+
+- macOS 10.15 (Catalina) is no longer supported. macOS 11 (Big Sur) or later is required.
+
+- We are considering dropping Ubuntu 16, Ubuntu 18 and other Linux releases >6 years old. If this would impact you, please let me know at ben@foundry376.com! It's getting harder to build a mailsync binary because our CI services are dropping support.
+
+Fixes:
+
+- Mailspring now conforms to the AppStream metainfo standard. Thanks @mischkl!
+
+## 1.14.0
+
+This version of Mailspring includes several improvements:
+
+- Mailspring now connects to Outlook accounts using OAuth.
+
+- The `autoconfig` database used to identify your IMAP and SMTP settings automatically has been upgraded to reflect changes in provider settings.
+
+- On Windows and Linux, previewing attachments is more robust and works with a wider variety of files. These attachments also have rendered previews in the message view.
+
+- Mailspring allows you to add Medium, GitHub and YouTube links to email signatures created in the app. (#2484) Thanks @sudeephazra!
+
+- Subject lines no longer overflow if they contain single long words (#2485) Thanks @probablykasper!
+
+Developer:
+
+- Mailspring now uses Electron 30, a recent supported release based on Chromium M124 - thanks to @Phylu for lots of PRs and manual testing that helped us move up three years of versions (v17 => v30) in the last 12 months!
+
+- The Changelog now mentions security contributions by Positive Technologies, Payatu, and Sonar in v1.13.3.
+
 ## 1.13.3
 
 Happy new year! This is a small update to Mailspring with a few important changes:
